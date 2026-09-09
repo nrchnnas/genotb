@@ -10,15 +10,18 @@ This is a rigorous **reproduction and consolidation**, not new methodology. Bina
 prediction is established and deployed (TB-Profiler, Mykrobe, the WHO catalogue); the pre-resistance
 signal is published (CRyPTIC Consortium, *Nat Commun* 2021). The value here is a single open, interpretable
 pipeline that (a) benchmarks susceptibility prediction on the full cohort, (b) extends it to quantitative
-MIC, and (c) tests a pre-resistance signal both cross-sectionally and within-host. See the manuscript
-(`GenoTB_Manuscript.docx`) for full positioning and limitations.
+MIC, and (c) tests a pre-resistance signal both cross-sectionally and within-host — and shows, via a
+specificity analysis, that most of that signal is confounded by MDR status rather than being
+pre-resistance. Note also that BV-BRC serves measured and model-predicted phenotypes in the same field
+(92% of *M. tuberculosis* records are predictions); all BV-BRC figures here use laboratory-derived
+records only. See the manuscript (`GenoTB_Manuscript.docx`) for full positioning and limitations.
 
 ## Results 
 | Analysis | Result |
 |---|---|
 | Susceptibility, 9 drugs | mean AUROC **0.94**, specificity 97% |
 | MIC regression | **79%** essential agreement (±1 dilution), 93% within ±2 |
-| Pre-resistance (background, target gene removed) | AUROC 0.83–0.94; catalogue-susceptible MXF 0.71 |
+| Pre-resistance (background, target gene removed) | AUROC 0.83–0.94 — but **largely confounded by MDR status**: a single MDR indicator alone reaches 0.813 vs 0.894 for the full model, and 0.725 within non-MDR isolates. Catalogue-susceptible MXF 0.71 |
 | Within-host acquisition (226 serial-isolate patients) | AUROC **0.66** (95% CI 0.60–0.73) |
 | Per-allele WHO catalogue vs codon-level | +0.002 AUROC (negligible — tested) |
 
