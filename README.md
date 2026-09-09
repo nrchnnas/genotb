@@ -11,8 +11,7 @@ prediction is established and deployed (TB-Profiler, Mykrobe, the WHO catalogue)
 signal is published (CRyPTIC Consortium, *Nat Commun* 2021). The value here is a single open, interpretable
 pipeline that (a) benchmarks susceptibility prediction on the full cohort, (b) extends it to quantitative
 MIC, and (c) tests a pre-resistance signal both cross-sectionally and within-host. See the manuscript
-(`GenoTB_Manuscript.docx`) for full positioning and limitations. Models are classical (gradient-boosted
-trees, logistic regression) — no GANs/VAEs.
+(`GenoTB_Manuscript.docx`) for full positioning and limitations.
 
 ## Results 
 | Analysis | Result |
