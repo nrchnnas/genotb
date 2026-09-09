@@ -30,9 +30,9 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)}
 .line{height:1px;background:var(--line);margin:13px 0}
 </style></head><body>
 <header><h1>GenoTB · In-silico Antibiogram for <i>M. tuberculosis</i></h1>
-<p>Toggle an isolate&#39;s resistance mutations; the model predicts its drug-susceptibility profile in
-milliseconds — the result phenotypic culture takes 2–8 weeks (median 114 days in Thai TB) to deliver.
-Predictions use <b>real logistic coefficients trained on the full 12,245-isolate CRyPTIC cohort</b> with
+<p>Select an isolate&#39;s resistance markers to predict its drug-susceptibility profile from
+genotype. Phenotypic culture, by comparison, takes 2–8 weeks for M. tuberculosis.
+Per-drug logistic regression trained on 12,245 CRyPTIC isolates with
 amino-acid-resolution features (held-out macro-AUROC 0.94).</p>
 <span class="badge">Research prototype · decision-support · not for clinical use</span></header>
 <div class="wrap">
@@ -40,7 +40,7 @@ amino-acid-resolution features (held-out macro-AUROC 0.94).</p>
 <div class="card"><h2>2 · Predicted antibiogram</h2><div class="verdict" id="verdict"></div>
 <table><thead><tr><th>Drug</th><th>Call</th><th>P(resistant)</th><th>Top driver</th></tr></thead><tbody id="rows"></tbody></table>
 <p class="small" style="margin-top:12px">Calls use a 50% threshold. Real per-drug logistic regression on 12,245 CRyPTIC isolates;
-held-out AUROC 0.89–0.97 (macro 0.94). Very-major error stays higher for kanamycin and ethionamide — shown honestly in the report.</p>
+held-out AUROC 0.89–0.97 (macro 0.94). Very-major error is higher for kanamycin and ethionamide; per-drug metrics are given in the manuscript.</p>
 </div></div>
 <div class="foot">Model: logistic regression on amino-acid features translated from each isolate&#39;s real VCF
 (CRyPTIC release June 2022), labels = real 96-well MIC phenotypes. Genotype here is user-specified; in deployment it is called from sequencing reads.</div>

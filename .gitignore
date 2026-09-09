@@ -27,3 +27,4 @@ cryptic/*_real.json
 GenoTB_Proposal.docx
 
 _chk/
+cryptic/*.npz
