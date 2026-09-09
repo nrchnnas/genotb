@@ -1,0 +1,65 @@
+{
+  "isoniazid": {
+    "katG_S315": 0.764,
+    "inhA_promoter": 0.165,
+    "rpoB_RRDR": 0.031,
+    "embB_306": 0.017,
+    "katG_LoF": 0.01
+  },
+  "rifampin": {
+    "rpoB_RRDR": 0.94,
+    "rpoB_435_445": 0.017,
+    "embB_306": 0.01,
+    "rpoB_450_any": 0.009,
+    "embB_406_497": 0.003
+  },
+  "ethambutol": {
+    "rpoB_RRDR": 0.59,
+    "embB_306": 0.181,
+    "embB_406_497": 0.079,
+    "katG_S315": 0.059,
+    "gyrA_QRDR": 0.016
+  },
+  "ethionamide": {
+    "inhA_promoter": 0.731,
+    "ethA_LoF": 0.088,
+    "ethA_nonsyn": 0.04,
+    "inhA_I194_S94": 0.039,
+    "rpoB_450_any": 0.018
+  },
+  "levofloxacin": {
+    "gyrA_QRDR": 0.913,
+    "gyrB_QRDR": 0.028,
+    "ethA_LoF": 0.008,
+    "rrs_1401": 0.007,
+    "embB_306": 0.005
+  },
+  "moxifloxacin": {
+    "gyrA_QRDR": 0.871,
+    "gyrB_QRDR": 0.024,
+    "gyrA_D94": 0.013,
+    "rrs_1401": 0.013,
+    "ethA_LoF": 0.011
+  },
+  "amikacin": {
+    "rrs_1401": 0.915,
+    "rrs_1484": 0.011,
+    "eis_promoter": 0.008,
+    "katG_S315": 0.007,
+    "ethA_LoF": 0.007
+  },
+  "kanamycin": {
+    "rrs_1401": 0.826,
+    "eis_promoter": 0.088,
+    "rrs_1484": 0.019,
+    "ethA_LoF": 0.007,
+    "rpoB_RRDR": 0.005
+  },
+  "rifabutin": {
+    "rpoB_RRDR": 0.901,
+    "rpoB_450_any": 0.05,
+    "inhA_promoter": 0.012,
+    "gyrA_QRDR": 0.01,
+    "rpoB_435_445": 0.004
+  }
+}

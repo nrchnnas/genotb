@@ -1,0 +1,7 @@
+drug,n,pctR,AUROC_full,AUROC_background_only,cryptic_resistance_AUROC
+levofloxacin,12120,17.6,0.936,0.876,0.604 (n_R=343)
+moxifloxacin,12150,14.1,0.942,0.887,0.705 (n_R=222)
+amikacin,12028,7.3,0.931,0.852,0.629 (n_R=164)
+kanamycin,12086,9.2,0.919,0.856,0.595 (n_R=230)
+ethambutol,10562,21.3,0.956,0.94,0.887 (n_R=376)
+ethionamide,11122,15.4,0.945,0.834,0.600 (n_R=160)

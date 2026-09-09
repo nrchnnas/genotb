@@ -1,0 +1,10 @@
+drug,n,essential_agreement,within_2dil,MAE_dilutions,R2
+isoniazid,12027,0.795,0.93,0.78,0.806
+rifampin,12056,0.759,0.931,0.87,0.803
+ethambutol,12114,0.769,0.95,0.73,0.506
+levofloxacin,12120,0.811,0.95,0.67,0.563
+moxifloxacin,12150,0.566,0.899,0.87,0.477
+amikacin,12028,0.914,0.974,0.61,0.598
+kanamycin,12086,0.846,0.981,0.54,0.487
+ethionamide,12088,0.761,0.95,0.7,0.472
+rifabutin,12106,0.877,0.936,0.47,0.829

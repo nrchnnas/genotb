@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>GenoTB — In-silico Antibiogram (full CRyPTIC model)</title>
+<style>
+:root{--ink:#1b2a4a;--res:#c0392b;--sus:#1f8a4c;--mid:#e08a1e;--bg:#f4f6fb;--card:#fff;--line:#dfe4ee;--mut:#6b7689;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+header{background:var(--ink);color:#fff;padding:20px 26px}
+header h1{margin:0;font-size:21px} header p{margin:5px 0 0;opacity:.82;font-size:13.5px;max-width:820px}
+.badge{display:inline-block;background:#2e4370;border-radius:20px;padding:2px 11px;font-size:11.5px;margin-top:9px}
+.wrap{max-width:1120px;margin:20px auto;padding:0 18px;display:grid;grid-template-columns:380px 1fr;gap:18px}
+@media(max-width:880px){.wrap{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 18px;box-shadow:0 1px 3px rgba(20,30,60,.05)}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.7px;color:var(--mut);margin:0 0 12px}
+label.mk{display:flex;align-items:center;gap:8px;font-size:13px;padding:5px 0;cursor:pointer;color:#33405c}
+label.mk code{background:#eef1f7;border-radius:5px;padding:1px 6px;font-size:12px}
+.examples{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px}
+.examples button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;color:var(--ink)}
+.examples button:hover{background:#eef1f7}
+.verdict{padding:13px 15px;border-radius:11px;margin-bottom:14px;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)}
+.pill{font-weight:700;font-size:12px;padding:2px 9px;border-radius:20px;color:#fff}
+.bar{height:7px;border-radius:4px;background:#edf0f6;overflow:hidden;width:110px;display:inline-block;vertical-align:middle}
+.bar>i{display:block;height:100%}
+.small{font-size:11.5px;color:var(--mut)}
+.foot{max-width:1120px;margin:6px auto 30px;padding:0 18px;font-size:11.5px;color:var(--mut)}
+.line{height:1px;background:var(--line);margin:13px 0}
+</style></head><body>
+<header><h1>GenoTB · In-silico Antibiogram for <i>M. tuberculosis</i></h1>
+<p>Toggle an isolate&#39;s resistance mutations; the model predicts its drug-susceptibility profile in
+milliseconds — the result phenotypic culture takes 2–8 weeks (median 114 days in Thai TB) to deliver.
+Predictions use <b>real logistic coefficients trained on the full 12,245-isolate CRyPTIC cohort</b> with
+amino-acid-resolution features (held-out macro-AUROC 0.94).</p>
+<span class="badge">Research prototype · decision-support · not for clinical use</span></header>
+<div class="wrap">
+<div class="card"><h2>1 · Genotype input</h2><div class="examples" id="examples"></div><div class="line"></div><div id="markers"></div></div>
+<div class="card"><h2>2 · Predicted antibiogram</h2><div class="verdict" id="verdict"></div>
+<table><thead><tr><th>Drug</th><th>Call</th><th>P(resistant)</th><th>Top driver</th></tr></thead><tbody id="rows"></tbody></table>
+<p class="small" style="margin-top:12px">Calls use a 50% threshold. Real per-drug logistic regression on 12,245 CRyPTIC isolates;
+held-out AUROC 0.89–0.97 (macro 0.94). Very-major error stays higher for kanamycin and ethionamide — shown honestly in the report.</p>
+</div></div>
+<div class="foot">Model: logistic regression on amino-acid features translated from each isolate&#39;s real VCF
+(CRyPTIC release June 2022), labels = real 96-well MIC phenotypes. Genotype here is user-specified; in deployment it is called from sequencing reads.</div>
+<script>
+const MODEL = {
+ "features": [
+  "rpoB RRDR (426\u2013452)",
+  "rpoB S450L",
+  "katG S315",
+  "inhA promoter (\u221215)",
+  "embB M306",
+  "embB G406/Q497",
+  "gyrA QRDR (90\u201394)",
+  "gyrA D94",
+  "gyrB QRDR",
+  "rrs a1401g",
+  "rrs g1484t",
+  "eis promoter",
+  "ethA loss-of-function",
+  "rpsL K43/K88"
+ ],
+ "drugs": {
+  "isoniazid": {
+   "coef": [
+    1.463,
+    0.176,
+    4.987,
+    4.038,
+    1.354,
+    0.875,
+    0.271,
+    0.491,
+    -0.47,
+    -0.456,
+    -0.808,
+    -0.824,
+    -0.148,
+    0.13
+   ],
+   "intercept": -2.636
+  },
+  "rifampin": {
+   "coef": [
+    4.157,
+    1.433,
+    0.857,
+    0.408,
+    1.001,
+    0.914,
+    0.534,
+    -0.172,
+    -0.056,
+    -0.069,
+    -1.99,
+    -0.191,
+    -0.362,
+    -0.216
+   ],
+   "intercept": -3.628
+  },
+  "ethambutol": {
+   "coef": [
+    2.178,
+    -0.104,
+    1.219,
+    0.094,
+    2.588,
+    2.0,
+    0.543,
+    0.235,
+    0.17,
+    0.304,
+    -0.068,
+    0.853,
+    -0.438,
+    -0.265
+   ],
+   "intercept": -4.334
+  },
+  "ethionamide": {
+   "coef": [
+    0.624,
+    0.667,
+    -0.463,
+    4.062,
+    0.506,
+    0.43,
+    0.5,
+    0.085,
+    0.467,
+    0.322,
+    -0.804,
+    0.584,
+    1.756,
+    -0.06
+   ],
+   "intercept": -3.568
+  },
+  "levofloxacin": {
+   "coef": [
+    0.744,
+    -0.095,
+    0.162,
+    0.125,
+    0.533,
+    0.396,
+    4.376,
+    0.09,
+    2.359,
+    -0.042,
+    -0.737,
+    0.212,
+    -0.015,
+    -0.049
+   ],
+   "intercept": -3.768
+  },
+  "moxifloxacin": {
+   "coef": [
+    0.762,
+    -0.248,
+    0.253,
+    0.388,
+    0.528,
+    0.417,
+    3.29,
+    0.928,
+    2.169,
+    0.118,
+    -0.282,
+    0.141,
+    -0.072,
+    0.036
+   ],
+   "intercept": -4.274
+  },
+  "amikacin": {
+   "coef": [
+    0.532,
+    -0.189,
+    -0.048,
+    0.053,
+    0.279,
+    0.494,
+    0.39,
+    -0.033,
+    -0.546,
+    5.562,
+    2.933,
+    0.836,
+    -0.21,
+    -0.231
+   ],
+   "intercept": -4.336
+  },
+  "kanamycin": {
+   "coef": [
+    0.766,
+    -0.283,
+    -0.092,
+    0.15,
+    0.036,
+    -0.234,
+    0.238,
+    -0.033,
+    0.187,
+    5.396,
+    3.255,
+    2.789,
+    0.376,
+    -0.297
+   ],
+   "intercept": -3.98
+  },
+  "rifabutin": {
+   "coef": [
+    3.485,
+    2.545,
+    0.214,
+    0.725,
+    0.594,
+    0.716,
+    0.656,
+    0.097,
+    -0.291,
+    -0.084,
+    -0.167,
+    0.531,
+    -0.405,
+    0.352
+   ],
+   "intercept": -3.627
+  }
+ },
+ "prevalence": {
+  "isoniazid": 0.489,
+  "rifampin": 0.387,
+  "ethambutol": 0.213,
+  "ethionamide": 0.154,
+  "levofloxacin": 0.176,
+  "moxifloxacin": 0.141,
+  "amikacin": 0.073,
+  "kanamycin": 0.092,
+  "rifabutin": 0.367
+ },
+ "note": "Real logistic-regression coefficients trained on the full CRyPTIC cohort (12,245 isolates), amino-acid-resolution genotype features."
+};
+const F=MODEL.features, DRUGS=Object.keys(MODEL.drugs);
+const EXAMPLES={"Pan-susceptible":[],"INH-monoresistant":[2],"MDR (Beijing)":[0,1,2],
+"Pre-XDR (+FQ)":[0,1,2,6,7],"XDR-type":[0,1,2,6,7,9]};
+const sel=new Set(); const sig=x=>1/(1+Math.exp(-x)); const cap=s=>s[0].toUpperCase()+s.slice(1);
+function predict(d){const m=MODEL.drugs[d];let z=m.intercept,best=-1e9,drv="—";
+for(let i=0;i<m.coef.length;i++){const on=sel.has(i)?1:0;z+=m.coef[i]*on;if(on&&m.coef[i]>best){best=m.coef[i];drv=F[i];}}
+return{p:sig(z),driver:drv};}
+const col=p=>p>=.5?"var(--res)":(p>=.2?"var(--mid)":"var(--sus)");
+function render(){const tb=document.getElementById("rows");tb.innerHTML="";const res={};
+DRUGS.forEach(d=>{const{p,driver}=predict(d);res[d]=p;const c=p>=.5?"R":"S";
+tb.innerHTML+=`<tr><td>${cap(d)}</td><td><span class="pill" style="background:${col(p)}">${c}</span></td>
+<td><span class="bar"><i style="width:${(p*100).toFixed(0)}%;background:${col(p)}"></i></span> <span class="small">${(p*100).toFixed(0)}%</span></td>
+<td><span class="small">${p>=.5?driver:"—"}</span></td></tr>`;});
+const R=d=>res[d]>=.5; const fq=["levofloxacin","moxifloxacin"].some(R); const inj=["amikacin","kanamycin"].some(R);
+let label,desc,c;
+if(R("isoniazid")&&R("rifampin")&&fq&&inj){label="XDR-TB pattern";c="var(--res)";desc="Resistant to INH+RIF, a fluoroquinolone and an injectable. Escalate to a bedaquiline-based regimen; specialist referral.";}
+else if(R("isoniazid")&&R("rifampin")&&(fq||inj)){label="Pre-XDR-TB pattern";c="var(--res)";desc="MDR plus second-line resistance. Standard MDR regimen likely to fail — individualise now, not in 6 weeks.";}
+else if(R("isoniazid")&&R("rifampin")){label="MDR-TB pattern";c="var(--res)";desc="Resistant to both first-line pillars (INH+RIF). First-line therapy will fail; start an MDR regimen and confirm by DST.";}
+else if(R("isoniazid")||R("rifampin")){label="Mono/poly-resistance";c="var(--mid)";desc="Resistance to a first-line drug detected. Adjust regimen and monitor.";}
+else{label="Pan-susceptible (predicted)";c="var(--sus)";desc="No high-confidence resistance markers. Standard first-line HRZE regimen is expected to be effective.";}
+const v=document.getElementById("verdict");
+v.style.background=c==="var(--res)"?"#fbeae8":(c==="var(--mid)"?"#fdf3e3":"#e9f6ee");
+v.innerHTML=`<b style="color:${c};font-size:15px">${label}</b><br><span class="small" style="color:#33405c">${desc}</span>`;}
+const mk=document.getElementById("markers");
+F.forEach((name,i)=>{const l=document.createElement("label");l.className="mk";
+l.innerHTML=`<input type="checkbox" data-i="${i}"><code>${name}</code>`;
+l.querySelector("input").addEventListener("change",e=>{e.target.checked?sel.add(i):sel.delete(i);render();});mk.appendChild(l);});
+const ex=document.getElementById("examples");
+Object.keys(EXAMPLES).forEach(n=>{const b=document.createElement("button");b.textContent=n;
+b.onclick=()=>{sel.clear();EXAMPLES[n].forEach(i=>sel.add(i));
+document.querySelectorAll("#markers input").forEach(inp=>inp.checked=sel.has(+inp.dataset.i));render();};ex.appendChild(b);});
+render();
+</script></body></html>
