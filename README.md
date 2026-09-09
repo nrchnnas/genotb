@@ -38,10 +38,42 @@ python3 viz_full.py; python3 viz_mic.py; python3 viz_forecast.py; python3 viz_lo
 node build_proposal.js         # -> GenoTB_Manuscript.docx
 ```
 
+## What this is useful for
+Phenotypic DST for *M. tuberculosis* takes 2–8 weeks because the organism doubles roughly once a day;
+sequencing can be done in hours. Anything that shortens the interval between specimen and an informed
+regimen has clinical value. Concretely, this pipeline supports:
+
+**Directly usable now**
+- *Rapid regimen triage.* An in-silico antibiogram across nine drugs while culture is still incubating
+  (`demo.html`), to be confirmed — not replaced — by phenotypic DST.
+- *Quantitative MIC rather than binary R/S.* Breakpoints discard information. A predicted MIC two
+  dilutions below the breakpoint is a different clinical situation from one just below it, and matters
+  for dose escalation and for borderline drugs.
+- *Genomic surveillance.* Resistance-allele frequencies and co-resistance structure across a population,
+  from sequence alone, without a reference laboratory performing DST on every isolate.
+- *A negative control others can reuse.* The MDR-confounding test (`confound_check.py`) and the
+  population-structure leakage test are drug-agnostic and apply to any genotype→phenotype claim.
+
+**Requires further work**
+- *External validation.* All results here are within-CRyPTIC. Whether the models transfer to other
+  lineage distributions and DST platforms is untested, and is the single most important open question.
+- *Prospective forecasting.* The pre-resistance signal is cross-sectional and largely MDR-confounded
+  (above). Turning it into genuine forecasting needs time-stamped serial isolates and survival analysis.
+- *Reads-to-report deployment.* Input here is a called VCF; clinical use needs the upstream basecalling
+  and variant-calling steps, plus per-prediction confidence.
+
+**Explicit non-uses.** This is a research prototype. It is not a diagnostic device, is not validated or
+regulated for patient care, and must not be used to withhold a drug from a patient. Very-major error
+(calling a resistant isolate susceptible) is drug-dependent and materially higher for kanamycin and
+ethionamide; per-drug error rates are in the manuscript and should be read before any applied use.
+
 ## Key files
 - `aa_engine.py` — variant→amino-acid translation (H37Rv gene models)
 - `catalogue.py` / `who_catalogue.py` — codon-restricted features / per-allele WHO matching
 - `classifier_full_aa.py`, `mic_regression.py`, `forecast_emergence.py`, `longitudinal_acquisition.py`
+- `confound_check.py` — MDR-confounding control for the pre-resistance result
+- `leakage_check.py` — random vs cluster-blocked splits (population-structure leakage)
+- `eval_rigorous.py` — re-evaluation of resampling methods (AUROC/AP vs threshold artifacts)
 - `GenoTB_Manuscript.docx`, `abstract.md`, `figures/`, `demo.html`
 
 ## Data
