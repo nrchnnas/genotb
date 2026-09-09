@@ -5,7 +5,7 @@ A reproducible analysis of the full **CRyPTIC** cohort (12,245 clinical isolates
 restricted to WHO-catalogue resistance loci, and used to predict (i) binary susceptibility, (ii) the
 minimum inhibitory concentration (MIC), and (iii) a pre-resistance / resistance-acquisition signal.
 
-## Scope (honest)
+## Scope
 This is a rigorous **reproduction and consolidation**, not new methodology. Binary genome→resistance
 prediction is established and deployed (TB-Profiler, Mykrobe, the WHO catalogue); the pre-resistance
 signal is published (CRyPTIC Consortium, *Nat Commun* 2021). The value here is a single open, interpretable
@@ -14,7 +14,7 @@ MIC, and (c) tests a pre-resistance signal both cross-sectionally and within-hos
 (`GenoTB_Manuscript.docx`) for full positioning and limitations. Models are classical (gradient-boosted
 trees, logistic regression) — no GANs/VAEs.
 
-## Results (held-out)
+## Results 
 | Analysis | Result |
 |---|---|
 | Susceptibility, 9 drugs | mean AUROC **0.94**, specificity 97% |
