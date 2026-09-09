@@ -108,17 +108,18 @@ children.push(P([
 ]));
 children.push(P([
   t("We therefore conducted a reproducible analysis of the full CRyPTIC cohort with three aims: (i) to benchmark interpretable susceptibility prediction across first- and second-line drugs; (ii) to extend prediction from binary calls to quantitative MIC; and (iii) to characterise a pre-resistance signal by testing whether genomic background, excluding a drug’s own target gene, anticipates resistance to that drug. "),
-  it("M. tuberculosis"), t(" was selected over other priority pathogens on the basis of data availability and mechanistic interpretability: querying the BV-BRC resource returned 2,137,022 laboratory susceptibility records for "),
-  it("M. tuberculosis"), t(" against only 22 for "), it("B. pseudomallei"),
-  t(", which is retained here as a motivating clinical context rather than a modelling target."),
+  it("M. tuberculosis"), t(" was selected over other priority pathogens on the basis of data availability and mechanistic interpretability. Counts must be read with care: 92% of BV-BRC susceptibility records for this taxon carry the evidence label ‘Computational Method’ (model-predicted MICs) rather than ‘Laboratory Method’, and we therefore counted only laboratory-derived records. On that basis BV-BRC returned 100,080 laboratory susceptibility records for "),
+  it("M. tuberculosis"), t(" — more than for "), it("E. coli"), t(" (92,452) or "),
+  it("K. pneumoniae"), t(" (66,140) — against none at all for "), it("B. pseudomallei"),
+  t(" (17 records in total, none laboratory-derived), which is retained here as a motivating clinical context rather than a modelling target."),
 ]));
 
 // ===================== 2. METHODS =====================
 children.push(H("2. Methods"));
 children.push(H2("2.1 Data"));
 children.push(P([
-  t("Genotype–phenotype pairs were obtained from the CRyPTIC compendium (release June 2022; reuse table), which provides, per isolate, a variant-call file (VCF) relative to the H37Rv reference (GenBank AL123456.3) and binary phenotypes with quantitative MICs measured on a 96-well broth-microdilution plate. Of 12,287 isolates with an available VCF, 12,245 (99.7%) were retrieved and analysed. Population-level resistance prevalences were additionally summarised from 225,000 laboratory records (44,163 isolates) in the BV-BRC "),
-  it("genome_amr"), t(" resource (taxon 1773)."),
+  t("Genotype–phenotype pairs were obtained from the CRyPTIC compendium (release June 2022; reuse table), which provides, per isolate, a variant-call file (VCF) relative to the H37Rv reference (GenBank AL123456.3) and binary phenotypes with quantitative MICs measured on a 96-well broth-microdilution plate. Of 12,287 isolates with an available VCF, 12,245 (99.7%) were retrieved and analysed. Population-level resistance prevalences were additionally summarised from 100,080 laboratory-derived records (16,105 isolates) in the BV-BRC "),
+  it("genome_amr"), t(" resource (taxon 1773). We note a data-provenance caveat that materially affects such summaries: BV-BRC mixes measured and predicted phenotypes in the same field, and for this taxon 1,215,667 of 1,315,747 resistant/susceptible records (92%) are labelled ‘Computational Method’ (XGBoost-predicted MICs) rather than ‘Laboratory Method’. Summaries that do not filter on the evidence field therefore largely describe a model’s output rather than laboratory data, and inflate apparent resistance prevalence; all BV-BRC figures reported here are restricted to laboratory-derived records."),
 ]));
 children.push(H2("2.2 Variant translation and features"));
 children.push(P([
@@ -200,7 +201,7 @@ children.push(img("figures/08_longitudinal.png",600,260));
 children.push(cap("8","Within-host prediction of resistance acquisition. (A) Receiver-operating characteristic for predicting, from a susceptible isolate’s background, whether the same patient harbours a resistant isolate (patient-grouped cross-validation). (B) The within-host (prospective) estimate is lower than the cross-sectional estimate, as expected; error bar denotes the patient-level bootstrap 95% confidence interval."));
 children.push(H2("3.5 Resistance epidemiology and population structure"));
 children.push(P([
-  t("At the population level, resistance prevalences in the cohort (isoniazid 49%, rifampicin 39%) and a multidrug-resistance frequency of 27% among co-tested isolates are consistent with the enriched composition of CRyPTIC and with independent BV-BRC records (Figure 5). Co-resistance structure (Figure 6) and a genotype-distance phylogeny (Figure 7) illustrate the clustering of resistant lineages that underpins genomic surveillance."),
+  t("At the population level, resistance prevalences in the cohort (isoniazid 49%, rifampicin 39%) and a multidrug-resistance frequency of 27% among co-tested isolates reflect the deliberately resistance-enriched composition of CRyPTIC. They exceed the corresponding laboratory-derived BV-BRC values (isoniazid 30.6%, rifampicin 23.7%, MDR 22.7% among 16,105 isolates), as expected for an enriched collection, and models trained on CRyPTIC should therefore not be read as calibrated to any general population (Figure 5). Co-resistance structure (Figure 6) and a genotype-distance phylogeny (Figure 7) illustrate the clustering of resistant lineages that underpins genomic surveillance."),
 ]));
 children.push(img("figures/01_resistance_heatmap.png",380,450));
 children.push(cap("5","Susceptibility profile of 90 representative isolates across nine drugs, ordered by resistance burden."));
